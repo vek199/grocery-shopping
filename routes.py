@@ -145,24 +145,109 @@ def logout():
 @app.route('/admin')
 @admin_required
 def admin():
-    return render_template('admin.html')
+    categories = Category.query.all()
+    return render_template('admin.html',categories=categories)
 
 @app.route('/category/add')
 @admin_required
 def add_category():
-    return render_template('add_category.html')
+    return render_template('category/add.html')
 
+@app.route('/category/add', methods=['POST'])
+@admin_required
+def add_category_post():
+    name = request.form.get('name')
+
+    if not name:
+        flash('fill the fields')
+        return redirect(url_for('add_category'))
+    
+    category = Category(name=name)
+    db.session.add(category)
+    db.session.commit()
+    
+    flash('Category added succesffully')
+    return redirect(url_for('admin'))
+        
 @app.route('/category/<int:id>/')
 @admin_required
 def show_category(id):
-    return 'show category'
+    category = Category.query.get(id)
+    if not category:
+        flash('Category does not exist')
+        return redirect(url_for('admin'))
+    return render_template('category/show.html',category=category)
 
 @app.route('/category/<int:id>/edit')
 @admin_required
 def edit_category(id):
-    return 'edit category'
+    category=Category.query.get(id)
+    if not category:
+        flash('category does not exists')
+        return redirect(url_for('admin'))
+    return render_template('category/edit.html',category=category)
+
+@app.route('/category/<int:id>/edit',methods=['POST'])
+@admin_required
+def edit_category_post(id):
+    category=Category.query.get(id)
+    if not category:
+        flash('category does not exists')
+        return redirect(url_for('admin'))
+    name = request.form.get('name')
+    if not name:
+        flash('Please fill out all value')
+        return redirect(url_for('edit_category',id=id))
+    category.name = name
+    db.session.commit()
+    flash('Category updated successfully')
+    return redirect(url_for('admin'))
 
 @app.route('/category/<int:id>/Delete')
 @admin_required
 def delete_category(id):
-    return 'Delete category'
+    category = Category.query.get(id)
+    if not category:
+        flash('category does not exist')
+        return redirect(url_for('admin'))
+    return render_template('category/delete.html',category=category)
+
+@app.route('/category/<int:id>/Delete',methods=['POST'])
+@admin_required
+def delete_category_post(id):
+    category = Category.query.get(id)
+    if not category:
+        flash('category does not exist')
+        return redirect(url_for('admin'))
+    db.session.delete(category)
+    db.session.commit()
+    flash('Category deleted Successfully')
+    return redirect(url_for('admin'))
+
+
+
+@app.route('/product/add/<int:category_id>')
+@admin_required
+def add_product(category_id):
+    categories = Category.query.all()
+    category = Category.query.get(category_id)
+    if not category:
+        flash('Category does not exists')
+        return redirect(url_for('admin'))
+    return render_template('product/add.html',category=category,categories=categories)
+
+@app.route('/product/add/<int:category_id>', methods=['POST'])
+@admin_required
+def add_product_post():
+    name = request.form.get('name')
+
+    if not name:
+        flash('fill the fields')
+        return redirect(url_for('add_category'))
+    
+    category = Category(name=name)
+    db.session.add(category)
+    db.session.commit()
+    
+    flash('Category added succesffully')
+    return redirect(url_for('admin'))

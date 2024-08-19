@@ -3,7 +3,7 @@ from app import app
 from models import db, User, Category, Cart, Product, Transaction, Order
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
-
+from datetime import datetime
 def auth_required(func):
     @wraps(func)
     def inner(*args, **kwargs):
@@ -236,18 +236,39 @@ def add_product(category_id):
         return redirect(url_for('admin'))
     return render_template('product/add.html',category=category,categories=categories)
 
-@app.route('/product/add/<int:category_id>', methods=['POST'])
+@app.route('/product/add>', methods=['POST'])
 @admin_required
 def add_product_post():
     name = request.form.get('name')
-
-    if not name:
-        flash('fill the fields')
-        return redirect(url_for('add_category'))
+    price = request.form.get('price')
+    category_id = request.form.get('category_id')
+    quantity = request.form.get('quantity')
+    man_date = request.form.get('man_date')
     
-    category = Category(name=name)
-    db.session.add(category)
+    category = Category.query.get(category_id)
+    if not category:
+        flash('Category does not exist')
+        return redirect(url_for('admin'))
+    
+    if  not name or not price or not quantity or not man_date:
+        flash('Please fill out all detail')
+        return redirect(url_for('add_product',category_id=category_id))
+    try:
+        quantity = int(quantity)
+        price= float(price)
+        man_date = datetime.strptime(man_date, '%Y-%m-%d')
+    except ValueError:
+        flash('Invalid quantity or price')
+        return redirect(url_for('add_product',category_id=category_id))
+    
+    product = Product(name=name, price=price, category=category, quantity=quantity, man_date=man_date)
+    db.session.add(product)
     db.session.commit()
+    flash('Product added successfully')
+    return redirect(url_for('show_category',id=category_id))
     
-    flash('Category added succesffully')
-    return redirect(url_for('admin'))
+    
+        
+    
+    
+

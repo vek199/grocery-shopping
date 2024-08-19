@@ -10,7 +10,7 @@
     Add Category
 </h1>
 
-<form action="" method="post" class="form">
+<form action="{{url_for('add_product',category_id=category.id)}}" method="post" class="form">
     <div class="form-group">
         <label for="name" class="form-label">Product Name:</label>
         <input type="text"
@@ -55,6 +55,12 @@
         id="man_date"
         class="form-control"
         required>
+    </div>
+    <div>
+        <button type="submit" class="btn btn-success">
+            <i class="fas fa-plus"></i>
+            Add
+        </button>
     </div>
 </form>
 {% endblock %}

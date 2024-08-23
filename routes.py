@@ -260,7 +260,14 @@ def add_product_post():
     except ValueError:
         flash('Invalid quantity or price')
         return redirect(url_for('add_product',category_id=category_id))
+    if price <= 0 or quantity<=0:
+        flash('Invalid Quantity or Price')
+        return redirect(url_for('add_product',category_id=category_id))
     
+    if man_date > datetime.now():
+        flash('Invalid manufacturing date')
+        return redirect(url_for('add_product',category_id=category_id))
+
     product = Product(name=name, price=price, category=category, quantity=quantity, man_date=man_date)
     db.session.add(product)
     db.session.commit()

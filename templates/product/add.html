@@ -10,7 +10,7 @@
     Add Category
 </h1>
 
-<form action="{{url_for('add_product',category_id=category.id)}}" method="post" class="form">
+<form action="{{url_for('add_product_post',category_id=category.id)}}" method="post" class="form">
     <div class="form-group">
         <label for="name" class="form-label">Product Name:</label>
         <input type="text"
@@ -21,7 +21,7 @@
     </div>
     <div class="form-group">
         <label for="price" class="form-label">Price:</label>
-        <input type="number"
+        <input type="number"   
         name="price"
         id="price"
         class="form-control"

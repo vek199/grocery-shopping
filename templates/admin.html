@@ -6,11 +6,14 @@ Admin Dashboard
 
 {% block content %}
 <h1 class="display-1">Admin Dashboard</h1>
-<a href="{{url_for('add_category')}}" class="btn btn-success">
-    <i class="fas fa-plus"></i>
-    Add</a>
-
+<div class="heading">
     <h2 class="display-2">Categories:</h2>
+    <a href="{{url_for('add_category')}}" class="btn btn-success">
+        <i class="fas fa-plus"></i>
+        Add</a>
+</div>
+
+ 
 
     <table class="table">
         <thead>
@@ -46,4 +49,16 @@ Admin Dashboard
             {% endfor %}
         </tbody>
     </table>
+{% endblock %}
+
+{% block style %}
+<style>
+    .heading{
+        display: flex;
+        flex-direction:row;
+        justify-content: space-between;
+        align-items: center;
+    }
+</style>
+    
 {% endblock %}

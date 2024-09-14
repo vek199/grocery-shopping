@@ -49,6 +49,18 @@ Admin Dashboard
             {% endfor %}
         </tbody>
     </table>
+
+    <hr>
+
+    <h2 class="display-2">Summary:</h2>
+
+    <div>
+        <canvas id="myChart"></canvas>
+      </div>
+      
+      
+     
+
 {% endblock %}
 
 {% block style %}
@@ -60,5 +72,35 @@ Admin Dashboard
         align-items: center;
     }
 </style>
+    
+{% endblock %}
+
+{% block script %}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+<script>
+    const ctx = document.getElementById('myChart');
+  
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: {{category_names|safe}},
+        datasets: [{
+          label: '# of Products',
+          data: {{category_sizes|safe}},
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+  </script>
     
 {% endblock %}

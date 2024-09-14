@@ -10,6 +10,10 @@
         <h2>{{ category.name }}</h2>
         <div class="products">
             {% for product in category.products %}
+            {% if pname != '' and pname.lower() in product.name.lower() or not pname %}
+                {% if price and product.price <= price or not price %}
+                
+            
             <div class="card" style="width: 18rem;">
                 <img src="https://picsum.photos/150/150" class="card-img-top" alt="{{product.name}}">
                 <div class="card-body">
@@ -42,6 +46,8 @@
                   
                 </div>
               </div>
+              {% endif %}
+              {% endif %}
             {% endfor %}
         </div>
     {% endfor %}

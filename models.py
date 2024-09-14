@@ -39,7 +39,7 @@ class Transaction(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     datetime = db.Column(db.DateTime, nullable=False)
 
-    orders = db.relationship('Order', backref='transaction', lazy=True)
+    orders = db.relationship('Order', backref='transaction', lazy=True, cascade='all, delete-orphan')
 
 class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
